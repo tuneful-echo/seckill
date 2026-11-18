@@ -1,0 +1,70 @@
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 200
+    max-connections: 8192
+    accept-count: 200
+
+spring:
+  application:
+    name: seckill
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      connection-timeout: 5000
+
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    # password:
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 200
+        max-idle: 50
+        min-idle: 10
+        max-wait: 1000ms
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: auto
+        prefetch: 20
+        concurrency: 5
+        max-concurrency: 10
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+# 秒杀业务配置
+seckill:
+  # 接口加盐，生产环境必须放配置中心或环境变量
+  salt: c1a8f3b2-seckill-salt-2026
+  # 秒杀地址有效期（秒）
+  path-ttl-seconds: 60
+  # 单用户每秒最多请求次数
+  rate-limit-per-second: 5
+
+logging:
+  level:
+    com.example.seckill: info
